@@ -41,6 +41,7 @@ import { PartialMoveToNewCollectionDialog } from "views-components/dialog-forms/
 import { PartialMoveToExistingCollectionDialog } from "views-components/dialog-forms/partial-move-to-existing-collection-dialog";
 import { PartialMoveToSeparateCollectionsDialog } from "views-components/dialog-forms/partial-move-to-separate-collections-dialog";
 import { RemoveProcessDialog } from "views-components/process-remove-dialog/process-remove-dialog";
+import { TrashConfirmDialog } from "views-components/trash-dialog/trash-confirm-dialog";
 import { RemoveWorkflowDialog } from "views-components/workflow-remove-dialog/workflow-remove-dialog";
 import { RemoveExternalCredentialDialog } from "views-components/dialog-remove/external-credential-remove-dialog";
 import { MainContentBar } from "views-components/main-content-bar/main-content-bar";
@@ -519,6 +520,7 @@ export const WorkbenchPanel = withStyles(styles)((props: WorkbenchPanelProps) =>
             <RemoveKeepServiceDialog />
             <RemoveLinkDialog />
             <RemoveProcessDialog />
+            <TrashConfirmDialog />
             <RemoveWorkflowDialog />
             <RemoveRepositoryDialog />
             <RemoveSshKeyDialog />
