@@ -7,6 +7,7 @@ import { PluginConfig } from 'common/plugintypes';
 export const pluginConfig: PluginConfig = {
     centerPanelList: [],
     sidePanelCategories: [],
+    sidePanelIcons: [],
     dialogs: [],
     navigateToHandlers: [],
     locationChangeHandlers: [],
