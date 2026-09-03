@@ -14,7 +14,7 @@ import { getNodeAncestors, getNodeAncestorsIds, getNode, TreeNode, initTreeNode,
 import { ProjectResource } from 'models/project';
 import { OrderBuilder } from 'services/api/order-builder';
 import { ResourceKind, extractUuidObjectType, ResourceObjectType, Resource } from 'models/resource';
-import { CategoriesListReducer } from 'common/plugintypes';
+import { CategoriesListReducer, SidePanelIconMap, SidePanelIconMapReducer } from 'common/plugintypes';
 import { pluginConfig } from 'plugins';
 import { LinkClass, LinkResource } from 'models/link';
 import { verifyAndUpdateLinks } from 'common/link-update-name';
@@ -82,6 +82,14 @@ const reduceCatsFn: (a: string[],
     b: CategoriesListReducer) => string[] = (a, b) => b(a);
 
 SIDE_PANEL_CATEGORIES = pluginConfig.sidePanelCategories.reduce(reduceCatsFn, SIDE_PANEL_CATEGORIES);
+
+const reduceIconsFn: (a: SidePanelIconMap,
+    b: SidePanelIconMapReducer) => SidePanelIconMap = (a, b) => b(a);
+
+// Icons contributed by plugins, consulted by getSidePanelIcon ahead of the
+// built-in categories. A plugin adding a category has no other way to give it
+// an icon, since the switch below matches on the SidePanelTreeCategory enum.
+const SIDE_PANEL_ICONS: SidePanelIconMap = pluginConfig.sidePanelIcons.reduce(reduceIconsFn, {});
 
 export const isSidePanelTreeCategory = (id: string) => SIDE_PANEL_CATEGORIES.some(category => category === id);
 
@@ -337,6 +345,10 @@ export const getSidePanelTreeNodeAncestorsIds = (id: string) => (treePicker: Tre
 };
 
 export const getSidePanelIcon = (category: string) => {
+    const pluginIcon = SIDE_PANEL_ICONS[category];
+    if (pluginIcon) {
+        return pluginIcon;
+    }
     switch (category) {
         case SidePanelTreeCategory.FAVORITES:
             return FavoriteIcon;

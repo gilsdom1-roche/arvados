@@ -8,9 +8,12 @@ import { RootStore, RootState } from 'store/store';
 import { ResourcesState } from 'store/resources/resources';
 import { Location } from 'history';
 import { ServiceRepository } from "services/services";
+import { IconType } from 'components/icon/icon';
 
 export type ElementListReducer = (startingList: React.ReactElement[], itemClass?: string) => React.ReactElement[];
 export type CategoriesListReducer = (startingList: string[]) => string[];
+export type SidePanelIconMap = { [category: string]: IconType };
+export type SidePanelIconMapReducer = (startingMap: SidePanelIconMap) => SidePanelIconMap;
 export type NavigateMatcher = (dispatch: Dispatch, getState: () => RootState, uuid: string) => boolean;
 export type LocationChangeMatcher = (store: RootStore, pathname: string) => boolean;
 export type EnableNew = (location: Location, currentItemId: string, currentUserUUID: string | undefined, resources: ResourcesState) => boolean;
@@ -64,6 +67,25 @@ export interface PluginConfig {
      * The hooks are applied in `store/side-panel-tree/side-panel-tree-actions.ts`.
      *  */
     sidePanelCategories: CategoriesListReducer[];
+
+    /* During initialization, each
+     * function in the callback list will be called with a map from side panel
+     * category name to the icon component drawn beside it.
+     *
+     * A plugin that contributes a category through `sidePanelCategories` has no
+     * other way to give it an icon. The built-in categories are matched by name
+     * against the SidePanelTreeCategory enum, and a name that is not in the enum
+     * falls back to the generic project icon.
+     *
+     * The map starts out empty; entries in it take precedence over the built-in
+     * ones, so a plugin may also replace the icon of a category it does not own.
+     *
+     * The callback function may add, edit, or remove entries, and return a new
+     * map, which will be passed to the next function in `sidePanelIcons`.
+     *
+     * The hooks are applied in `store/side-panel-tree/side-panel-tree-actions.ts`.
+     *  */
+    sidePanelIcons: SidePanelIconMapReducer[];
 
     /* This is a list of additional dialog box components.
      * Dialogs are components that are wrapped using the "withDialog()" method.
